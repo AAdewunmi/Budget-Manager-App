@@ -1,8 +1,17 @@
 /* Base layout reset and centering for the page */
 body{
     margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: rgb(192, 192, 192);
     display: flex;
     justify-content: center;
+}
+
+/* Container styling for the budget manager app */
+.container {
+    width: 80vw;
+    height: 80vh;
+    background-color: aliceblue;
+    border-radius: 1rem;
 }
