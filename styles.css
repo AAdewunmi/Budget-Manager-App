@@ -1,0 +1,8 @@
+/* Base layout reset and centering for the page */
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+}
