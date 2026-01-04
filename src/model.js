@@ -1,9 +1,22 @@
-const transactionType = {
+export const transactionType = {
     INCOME: 'INCOME',
     EXPENSES: 'EXPENSES',
 };
 
-class Transaction {
+export class Transaction {
     value;
     type;
+    id;
+
+    constructor(type, value){
+        if (typeof value !== 'number' || isNaN(value)){
+            throw new Error('Value must be a valid number');
+        }
+        this.value = value;
+        if (!(type in transactionType)){
+            throw new Error('Type must be INCOME or EXPENSES');
+        }
+        this.type = type;
+        this.id = `${type} - ${value} - ${Math.random().toFixed(4) * 100}`;
+    }
 }
