@@ -1,4 +1,5 @@
 import { Transaction, transactionType } from "./model";
+import AddTransaction from "./Views/AddTransactionView";
 
 const getTransactionFromLS = (type)=>{
     return JSON.parse(localStorage.getItem(type) || '[]');
