@@ -11,6 +11,15 @@ class AddTransactionView{
     addSubmitHandler(handler){
         this.parentElement.addEventListener("submit", handler.bind(this));
     }
+
+    get amount(){
+        return parseFloat(this.valueInput.value);
+    }
+
+    get type(){
+        return this.typeSelect.value;
+    }
+
 }
 
 export default new AddTransactionView();

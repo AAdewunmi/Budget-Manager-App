@@ -1,4 +1,5 @@
 import { Transaction, transactionType } from "./model";
+import AddTransactionView from "./Views/AddTransactionView";
 import AddTransaction from "./Views/AddTransactionView";
 
 const getTransactionFromLS = (type)=>{
@@ -13,6 +14,15 @@ const saveTransactionInLS = (transaction) => {
     }
 };
 
-const temp = new Transaction(transactionType.INCOME, 4000);
-saveTransactionInLS(temp)
-console.log(temp)
+const controllAddTransaction = (event)=> {
+    event.previewDefault();
+    const { amount, type } = AddTransactionView;
+    const newTran = new Transaction(type, amount);
+    saveTransactionInLS(newTran);
+} 
+
+const init = ()=>{
+    AddTransactionView.addSubmitHandler(controllAddTransaction)
+};
+
+init();
