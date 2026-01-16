@@ -1,6 +1,5 @@
-import { Transaction, transactionType } from "./model";
+import { Transaction } from "./model";
 import AddTransactionView from "./Views/AddTransactionView";
-import AddTransaction from "./Views/AddTransactionView";
 
 const getTransactionFromLS = (type)=>{
     return JSON.parse(localStorage.getItem(type) || '[]');
@@ -15,8 +14,9 @@ const saveTransactionInLS = (transaction) => {
 };
 
 const controllAddTransaction = (event)=> {
-    event.previewDefault();
-    const { amount, type } = AddTransactionView;
+    event.preventDefault();
+    const amount = AddTransactionView.amount;
+    const type = AddTransactionView.type;
     const newTran = new Transaction(type, amount);
     saveTransactionInLS(newTran);
 } 
