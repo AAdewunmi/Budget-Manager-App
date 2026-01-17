@@ -19,6 +19,7 @@ const controllAddTransaction = (event)=> {
     const type = AddTransactionView.type;
     const newTran = new Transaction(type, amount);
     saveTransactionInLS(newTran);
+    AddTransactionView.clearForm();
 } 
 
 const init = ()=>{

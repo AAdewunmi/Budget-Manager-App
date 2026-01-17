@@ -1,3 +1,5 @@
+import { transactionType } from "../model";
+
 class AddTransactionView{
     parentElement = document.querySelector(".add_transaction_form");
     valueInput = this.parentElement.querySelector(".value_input");
