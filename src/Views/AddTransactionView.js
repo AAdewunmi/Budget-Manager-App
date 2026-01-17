@@ -20,6 +20,11 @@ class AddTransactionView{
         return this.typeSelect.value;
     }
 
+    clearForm(){
+        this.valueInput.value = "";
+        this.typeSelect.value = transactionType.INCOME;
+    }
+
 }
 
 export default new AddTransactionView();
