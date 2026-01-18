@@ -9,7 +9,14 @@
 </head>
 <body>
     <div class="container">
-        <form class="add_transaction_form">
+        <div class="expense_container mycard">
+            This is expense_container
+        </div>
+        <div class="income_container mycard">
+            This is income_container
+        </div>
+        <div class="add_transaction_container">
+            <form class="add_transaction_form">
             <select name="transaction_type" class="transaction_type">
                 <option value="INCOME">Income</option>
                 <option value="EXPENSES">Expense</option>
@@ -17,6 +24,7 @@
             <input type="number" class="value_input">
             <button type="submit">Submit</button>
         </form>
+        </div>
     </div>
 </body>
 </html>

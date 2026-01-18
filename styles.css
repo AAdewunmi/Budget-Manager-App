@@ -14,4 +14,16 @@ body{
     height: 80vh;
     background-color: aliceblue;
     border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.mycard{
+    background-color: white;
+    width: 33%;
+    height: 100%;
+    border: solid gray;
+    border-width: 1px;
+    border-radius: 0.5rem;
 }
