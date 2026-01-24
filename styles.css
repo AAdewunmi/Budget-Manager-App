@@ -27,3 +27,10 @@ body{
     border-width: 1px;
     border-radius: 0.5rem;
 }
+
+.form_item{
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+}
