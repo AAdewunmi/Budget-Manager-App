@@ -29,8 +29,16 @@ body{
 }
 
 .form_item{
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
+    margin-top: 0.10rem;
+    margin-bottom: 0.10rem;
     display: flex;
     justify-content: space-between;
+}
+
+.submit-btn{
+    background-color: rgb(7, 87, 167);
+    color: white;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    border: none;
 }
