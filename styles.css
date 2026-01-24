@@ -29,10 +29,16 @@ body{
 }
 
 .form_item{
-    margin-top: 0.10rem;
-    margin-bottom: 0.10rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
     display: flex;
     justify-content: space-between;
+}
+
+.add_transaction_form{
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
 }
 
 .submit-btn{
@@ -41,4 +47,5 @@ body{
     padding-left: 0.6rem;
     padding-right: 0.6rem;
     border: none;
+    font-size: large;
 }
