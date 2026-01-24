@@ -17,11 +17,17 @@
         </div>
         <div class="add_transaction_container">
             <form class="add_transaction_form">
-            <select name="transaction_type" class="transaction_type">
-                <option value="INCOME">Income</option>
-                <option value="EXPENSES">Expense</option>
-            </select>
-            <input type="number" class="value_input">
+                <div class="form_item">
+                    <label for="selectType">Type</label>
+                    <select id="selectType" name="transaction_type" class="transaction_type">
+                        <option value="INCOME">Income</option>
+                        <option value="EXPENSES">Expense</option>
+                    </select>
+                </div>
+                <div class="form_item">
+                    <label for="value_input_id">Amount</label>
+                    <input type="number" id="value_input_id" class="value_input">
+                </div>
             <button type="submit">Submit</button>
         </form>
         </div>
