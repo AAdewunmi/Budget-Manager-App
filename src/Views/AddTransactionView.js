@@ -15,7 +15,7 @@ class AddTransactionView{
     }
 
     get amount(){
-        return parseFloat(this.valueInput.value);
+        return Number(this.valueInput.value);
     }
 
     get type(){
@@ -25,6 +25,12 @@ class AddTransactionView{
     clearForm(){
         this.valueInput.value = "";
         this.typeSelect.value = transactionType.INCOME;
+    }
+
+    showValidationError(message){
+        this.valueInput.setCustomValidity(message);
+        this.valueInput.reportValidity();
+        this.valueInput.setCustomValidity("");
     }
 
 }

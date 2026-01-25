@@ -5,4 +5,4 @@ class BalanceView{
     }
 }
 
-export default BalanceView();
+export default new BalanceView();
