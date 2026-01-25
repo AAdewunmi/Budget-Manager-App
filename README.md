@@ -14,6 +14,7 @@ What I intend to do next
 - Add local storage persistence
 - Create summary views (monthly totals, category breakdowns)
 - Improve UI polish and accessibility
+- Move app storage from local to SQLite
 
 Tech stack (current)
 - HTML, CSS, JavaScript
