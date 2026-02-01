@@ -9,7 +9,8 @@ export class ListView{
         let html = "";
         if(Array.isArray(data)){
             data.forEach(transaction=>{
-                html+=`<div>${transaction.value}</div>`
+                const description = (transaction.description || "").trim() || "No description";
+                html+=`<div>${description} - ${transaction.value}</div>`
             })
         }
         return html;

@@ -1,6 +1,8 @@
 import { Transaction, transactionType } from "./model";
 import AddTransactionView from "./Views/AddTransactionView";
 import BalanceView from "./Views/BalanceView";
+import ExpenseTrackerView from "./Views/ExpenseTrackerView";
+import IncomeTrackerView from "./Views/IncomeTrackerView";
 
 const getTransactionFromLS = (type)=>{
     return JSON.parse(localStorage.getItem(type) || '[]');
@@ -18,14 +20,20 @@ const controllAddTransaction = (event)=> {
     event.preventDefault();
     const amount = AddTransactionView.amount;
     const type = AddTransactionView.type;
+    const description = AddTransactionView.description;
     if (!Number.isFinite(amount)){
         AddTransactionView.showValidationError("Please enter a valid amount.");
         return;
     }
-    const newTran = new Transaction(type, amount);
+    const newTran = new Transaction(type, amount, description);
     saveTransactionInLS(newTran);
     AddTransactionView.clearForm();
     BalanceView.render(calculateTotalBalance());
+    if (type === transactionType.EXPENSES) {
+        ExpenseTrackerView.render(getTransactionFromLS(transactionType.EXPENSES));
+    } else if (type === transactionType.INCOME) {
+        IncomeTrackerView.render(getTransactionFromLS(transactionType.INCOME));
+    }
 } 
 
 const calculateTotalBalance = ()=>{
@@ -46,6 +54,8 @@ const calculateTotalBalance = ()=>{
 const init = ()=>{
     AddTransactionView.addSubmitHandler(controllAddTransaction);
     BalanceView.render(calculateTotalBalance())
+    ExpenseTrackerView.render(getTransactionFromLS(transactionType.EXPENSES));
+    IncomeTrackerView.render(getTransactionFromLS(transactionType.INCOME));
 };
 
 init();

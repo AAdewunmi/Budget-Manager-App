@@ -7,12 +7,14 @@ export class Transaction {
     value;
     type;
     id;
+    description;
 
-    constructor(type, value){
+    constructor(type, value, description = ""){
         if (typeof value !== 'number' || isNaN(value)){
             throw new Error('Value must be a valid number');
         }
         this.value = value;
+        this.description = String(description).trim();
         if (!(type in transactionType)){
             throw new Error('Type must be INCOME or EXPENSES');
         }

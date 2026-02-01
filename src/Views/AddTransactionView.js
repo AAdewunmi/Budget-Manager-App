@@ -3,6 +3,7 @@ import { transactionType } from "../model";
 class AddTransactionView{
     parentElement = document.querySelector(".add_transaction_form");
     valueInput = this.parentElement.querySelector(".value_input");
+    descriptionInput = this.parentElement.querySelector(".description_input");
     typeSelect = this.parentElement.querySelector(".transaction_type");
     constructor(){
         this.typeSelect.addEventListener("change", ()=>{
@@ -22,8 +23,13 @@ class AddTransactionView{
         return this.typeSelect.value;
     }
 
+    get description(){
+        return this.descriptionInput.value;
+    }
+
     clearForm(){
         this.valueInput.value = "";
+        this.descriptionInput.value = "";
         this.typeSelect.value = transactionType.INCOME;
     }
 
