@@ -2,7 +2,7 @@ export class ListView{
     render(data){
         this.data = data;
         const html = this.generateHTMLString(); 
-          
+        this.container.innerHTML = html;
     }
     generateHTMLString(){
         const data = this.data;
