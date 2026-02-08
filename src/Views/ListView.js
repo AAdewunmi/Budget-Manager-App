@@ -9,13 +9,17 @@ export class ListView{
         this.container.insertAdjacentHTML("afterbegin", )
     }
 
+    generateCardHTML(transaction){
+        return `<div>${description} - ${transaction.value}</div>`;
+    }
+
     generateHTMLString(){
         const data = this.data;
         let html = "";
         if(Array.isArray(data)){
             data.forEach(transaction=>{
                 const description = (transaction.description || "").trim() || "No description";
-                html+=`<div>${description} - ${transaction.value}</div>`
+                html += this.generateCardHTML(transaction); 
             })
         }
         return html;
