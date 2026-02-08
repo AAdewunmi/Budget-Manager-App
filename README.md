@@ -13,7 +13,7 @@ What I intend to do next
 - Implement category budgets and totals
 - Add local storage persistence
 - Create summary views (monthly totals, category breakdowns)
-- Improve UI polish and accessibility
+- Improve UI polish and accessibility (i.e. Add reset button)
 - Move app storage from local to SQLite
 
 Tech stack (current)

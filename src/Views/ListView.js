@@ -4,6 +4,11 @@ export class ListView{
         const html = this.generateHTMLString(); 
         this.container.innerHTML = html;
     }
+
+    pushTransitionInContainer(){
+        this.container.insertAdjacentHTML("afterbegin", )
+    }
+
     generateHTMLString(){
         const data = this.data;
         let html = "";
