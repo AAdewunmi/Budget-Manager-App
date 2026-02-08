@@ -5,8 +5,11 @@ export class ListView{
         this.container.innerHTML = html;
     }
 
-    pushTransitionInContainer(){
-        this.container.insertAdjacentHTML("afterbegin", )
+    pushTransitionInContainer(transaction){
+        this.container.insertAdjacentHTML(
+            "afterbegin", 
+            this.generateCardHTML(transaction)
+        );
     }
 
     generateCardHTML(transaction){
