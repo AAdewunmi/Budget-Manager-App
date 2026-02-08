@@ -13,7 +13,10 @@ export class ListView{
     }
 
     generateCardHTML(transaction){
-        return `<div>${description} - ${transaction.value}</div>`;
+        const description = (transaction.description || "").trim() || "No description";
+        return `<div class="transaction_card">
+        <div>${description} - ${transaction.value} - ${transaction.timestamp}</div>
+        </div>`;
     }
 
     generateHTMLString(){
@@ -21,7 +24,6 @@ export class ListView{
         let html = "";
         if(Array.isArray(data)){
             data.forEach(transaction=>{
-                const description = (transaction.description || "").trim() || "No description";
                 html += this.generateCardHTML(transaction); 
             })
         }

@@ -50,3 +50,9 @@ body{
     font-size: large;
     border-radius: 0.2rem;
 }
+
+.transaction_card{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
