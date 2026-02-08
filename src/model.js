@@ -8,6 +8,7 @@ export class Transaction {
     type;
     id;
     description;
+    timestamp;
 
     constructor(type, value, description = ""){
         if (typeof value !== 'number' || isNaN(value)){
@@ -20,5 +21,6 @@ export class Transaction {
         }
         this.type = type;
         this.id = `${type} - ${value} - ${Math.random().toFixed(4) * 100}`;
+        this.timestamp = Date.now()
     }
 }
