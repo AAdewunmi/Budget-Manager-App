@@ -16,7 +16,7 @@ export class ListView {
     const description =
       (transaction.description || "").trim() || "No description";
     return `<div class="transaction_card">
-        <div>${description} - ${transaction.value} - ${transaction.timestamp}</div>
+        <div>${description} - ${transaction.value} - ${this.formatTimestamp(transaction.timestamp)}</div>
         </div>`;
   }
 
