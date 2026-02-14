@@ -26,6 +26,7 @@ body{
     border: solid gray;
     border-width: 1px;
     border-radius: 0.5rem;
+    padding: 0.4rem;
 }
 
 .form_item{
@@ -54,5 +55,13 @@ body{
 .transaction_card{
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: auto;
+    padding: 0.4rem;
+    height: 1.5rem;
+    align-items: center;
+    border: solid rgb(187, 187, 187);
+    border-width: 1px;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    border-radius: 0.3rem;
 }
