@@ -15,8 +15,11 @@ export class ListView {
   generateCardHTML(transaction) {
     const description =
       (transaction.description || "").trim() || "No description";
+    const valueClass = transaction.type == "EXPENSES" ? "red" : "green";
     return `<div class="transaction_card">
-        <div>${description} - ${transaction.value} - ${this.formatTimestamp(transaction.timestamp)}</div>
+        <div>${description} 
+        - <span class="${valueClass}">${transaction.value}</span> 
+        - ${this.formatTimestamp(transaction.timestamp)}</div>
         </div>`;
   }
 
