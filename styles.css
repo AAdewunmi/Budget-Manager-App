@@ -65,3 +65,11 @@ body{
     margin-bottom: 0.3rem;
     border-radius: 0.3rem;
 }
+
+.red{
+    color: rgb(255, 95, 95);
+}
+
+.green{
+    color: rgb(43, 211, 43);
+}
