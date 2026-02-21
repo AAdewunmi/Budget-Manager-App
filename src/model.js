@@ -1,8 +1,14 @@
+/**
+ * Supported transaction categories used across the app and localStorage keys.
+ */
 export const transactionType = {
     INCOME: 'INCOME',
     EXPENSES: 'EXPENSES',
 };
 
+/**
+ * Domain model for a single budget transaction.
+ */
 export class Transaction {
     value;
     type;
@@ -10,6 +16,11 @@ export class Transaction {
     description;
     timestamp;
 
+    /**
+     * @param {"INCOME"|"EXPENSES"} type
+     * @param {number} value
+     * @param {string} [description=""]
+     */
     constructor(type, value, description = ""){
         if (typeof value !== 'number' || isNaN(value)){
             throw new Error('Value must be a valid number');

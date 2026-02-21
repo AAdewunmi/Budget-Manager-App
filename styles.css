@@ -1,9 +1,29 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root{
+    /* Intentional visible fallback for easy font-load debugging */
+    --app-font-stack: "Roboto", "Courier New", Courier, monospace;
+}
+
+html{
+    font-family: var(--app-font-stack) !important;
+}
+
+/* Ensure global inheritance so controls and generated nodes stay consistent. */
+body{
+    font-family: inherit !important;
+}
+
+*, *::before, *::after{
+    font-family: inherit !important;
+}
+
 /* Base layout reset and centering for the page */
 body,html{
     margin: 0;
     padding: 0;
     height: 100vh;
-    font-family: Arial, sans-serif;
     background: #2A7B9B;
     background: linear-gradient(155deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
     display: flex;
@@ -36,8 +56,10 @@ body,html{
 .card_title{
     margin: 0.2rem 0.3rem 0.6rem;
     font-size: 1.1rem;
+    font-weight: 700;
 }
 
+/* Placeholder message shown when a list has no transactions yet. */
 .empty_state{
     color: rgb(110, 110, 110);
     margin: 0.4rem;
@@ -64,8 +86,10 @@ body,html{
     border: none;
     font-size: large;
     border-radius: 0.2rem;
+    cursor: pointer;
 }
 
+/* Single income/expense row in list panels. */
 .transaction_card{
     display: flex;
     justify-content: space-between;
@@ -92,6 +116,7 @@ body,html{
     font-size: xx-large;
 }
 
+/* Aligns label + value at the top of the transaction form card. */
 .balance_container{
     width: auto;
     display: flex;

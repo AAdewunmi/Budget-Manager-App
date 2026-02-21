@@ -4,10 +4,16 @@ import BalanceView from "./Views/BalanceView";
 import ExpenseTrackerView from "./Views/ExpenseTrackerView";
 import IncomeTrackerView from "./Views/IncomeTrackerView";
 
+/**
+ * Reads a transaction list for a given type from localStorage.
+ */
 const getTransactionFromLS = (type)=>{
     return JSON.parse(localStorage.getItem(type) || '[]');
 };
 
+/**
+ * Persists a new transaction in its type-specific localStorage bucket.
+ */
 const saveTransactionInLS = (transaction) => {
     let data = getTransactionFromLS(transaction.type);
     if (Array.isArray(data)) {
@@ -16,6 +22,11 @@ const saveTransactionInLS = (transaction) => {
     }
 };
 
+/**
+ * One-time corrective migration:
+ * if a previously saved income description looks like "rent/reent",
+ * move it into expenses.
+ */
 const migrateRentEntriesToExpenses = ()=>{
     const incomes = getTransactionFromLS(transactionType.INCOME);
     if (!Array.isArray(incomes) || incomes.length === 0) return;
@@ -48,6 +59,9 @@ const migrateRentEntriesToExpenses = ()=>{
     );
 };
 
+/**
+ * Handles form submission, validation, confirmation and targeted UI refresh.
+ */
 const controllAddTransaction = (event)=> {
     event.preventDefault();
     const amount = AddTransactionView.amount;
@@ -59,6 +73,7 @@ const controllAddTransaction = (event)=> {
     }
 
     if (type === transactionType.INCOME) {
+        // Guardrail: reduce accidental income submissions.
         const isConfirmed = window.confirm(
           "You selected Income. Are you sure this is not an expense?",
         );
@@ -76,6 +91,9 @@ const controllAddTransaction = (event)=> {
     }
 } 
 
+/**
+ * Computes the current net balance from stored income and expense records.
+ */
 const calculateTotalBalance = ()=>{
     let expense = getTransactionFromLS(transactionType.EXPENSES);
     let income = getTransactionFromLS(transactionType.INCOME);
@@ -91,6 +109,9 @@ const calculateTotalBalance = ()=>{
     return total;
 }
 
+/**
+ * Boots the UI by binding handlers and rendering all visible sections.
+ */
 const init = ()=>{
     migrateRentEntriesToExpenses();
     AddTransactionView.addSubmitHandler(controllAddTransaction);
