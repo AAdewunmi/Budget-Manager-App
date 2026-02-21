@@ -1,11 +1,14 @@
 /* Base layout reset and centering for the page */
-body{
+body,html{
     margin: 0;
     padding: 0;
+    height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: rgb(192, 192, 192);
+    background: #2A7B9B;
+    background: linear-gradient(155deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 /* Container styling for the budget manager app */
