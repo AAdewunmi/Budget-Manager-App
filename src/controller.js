@@ -57,6 +57,14 @@ const controllAddTransaction = (event)=> {
         AddTransactionView.showValidationError("Please enter a valid amount.");
         return;
     }
+
+    if (type === transactionType.INCOME) {
+        const isConfirmed = window.confirm(
+          "You selected Income. Are you sure this is not an expense?",
+        );
+        if (!isConfirmed) return;
+    }
+
     const newTran = new Transaction(type, amount, description);
     saveTransactionInLS(newTran);
     AddTransactionView.clearForm();
