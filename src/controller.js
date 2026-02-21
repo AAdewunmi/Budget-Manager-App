@@ -16,6 +16,38 @@ const saveTransactionInLS = (transaction) => {
     }
 };
 
+const migrateRentEntriesToExpenses = ()=>{
+    const incomes = getTransactionFromLS(transactionType.INCOME);
+    if (!Array.isArray(incomes) || incomes.length === 0) return;
+
+    const rentLikePattern = /\bre+nt\b/i;
+    const movedToExpenses = [];
+    const keptInIncome = [];
+
+    incomes.forEach((transaction)=>{
+        const description = String(transaction?.description || "").trim();
+        if (rentLikePattern.test(description)) {
+            movedToExpenses.push({
+                ...transaction,
+                type: transactionType.EXPENSES,
+            });
+        } else {
+            keptInIncome.push(transaction);
+        }
+    });
+
+    if (movedToExpenses.length === 0) return;
+
+    const expenses = getTransactionFromLS(transactionType.EXPENSES);
+    const safeExpenses = Array.isArray(expenses) ? expenses : [];
+
+    localStorage.setItem(transactionType.INCOME, JSON.stringify(keptInIncome));
+    localStorage.setItem(
+      transactionType.EXPENSES,
+      JSON.stringify([...safeExpenses, ...movedToExpenses]),
+    );
+};
+
 const controllAddTransaction = (event)=> {
     event.preventDefault();
     const amount = AddTransactionView.amount;
@@ -52,6 +84,7 @@ const calculateTotalBalance = ()=>{
 }
 
 const init = ()=>{
+    migrateRentEntriesToExpenses();
     AddTransactionView.addSubmitHandler(controllAddTransaction);
     BalanceView.render(calculateTotalBalance())
     ExpenseTrackerView.render(getTransactionFromLS(transactionType.EXPENSES));

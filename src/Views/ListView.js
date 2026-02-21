@@ -1,24 +1,32 @@
 export class ListView {
+  title = "Transactions";
+  emptyMessage = "No transactions yet.";
+
   render(data) {
-    this.data = data;
-    const html = this.generateHTMLString();
-    this.container.innerHTML = html;
+    this.data = Array.isArray(data) ? data : [];
+    this.container.innerHTML = this.generateHTMLString();
   }
 
   pushTransitionInContainer(transaction) {
     this.container.insertAdjacentHTML(
-      "afterbegin",
+      "beforeend",
       this.generateCardHTML(transaction),
     );
+  }
+
+  formatCurrency(value) {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return "£0";
+    return `£${amount.toLocaleString("en-GB")}`;
   }
 
   generateCardHTML(transaction) {
     const description =
       (transaction.description || "").trim() || "No description";
-    const valueClass = transaction.type == "EXPENSES" ? "red" : "green";
+    const valueClass = transaction.type === "EXPENSES" ? "red" : "green";
     return `<div class="transaction_card">
-        <div>${description} 
-        - <span class="${valueClass}">${transaction.value}</span> 
+        <div>${description}
+        - <span class="${valueClass}">${this.formatCurrency(transaction.value)}</span>
         - ${this.formatTimestamp(transaction.timestamp)}</div>
         </div>`;
   }
@@ -28,13 +36,9 @@ export class ListView {
   }
 
   generateHTMLString() {
-    const data = this.data;
-    let html = "";
-    if (Array.isArray(data)) {
-      data.forEach((transaction) => {
-        html += this.generateCardHTML(transaction);
-      });
-    }
-    return html;
+    const cards = this.data.map((transaction) => this.generateCardHTML(transaction)).join("");
+    const body = cards || `<div class="empty_state">${this.emptyMessage}</div>`;
+
+    return `<h3 class="card_title">${this.title}</h3>${body}`;
   }
 }
