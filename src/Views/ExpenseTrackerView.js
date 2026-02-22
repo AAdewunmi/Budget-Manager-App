@@ -7,6 +7,7 @@ class ExpenseTrackerView extends ListView {
   container = document.querySelector(".expense_container");
   title = "Expenses";
   emptyMessage = "No expenses yet.";
+  filterSelect = document.querySelector("#expense_filter")
 }
 
 export default new ExpenseTrackerView();
