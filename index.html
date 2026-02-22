@@ -9,16 +9,37 @@
 </head>
 <body>
     <div class="container">
-        <!-- Left panel: income transaction history -->
-        <div class="income_container mycard">
+        <!-- Left panel: income filter + transaction history -->
+        <div class="income_column">
+            <div class="income_filter_controls">
+                <div class="filter_styling">Search Income</div>
+                <select name="income_filter" id="income_filter">
+                    <option value="date">Date</option>
+                    <option value="amount+">Increasing Amount</option>
+                    <option value="amount-">Decreasing Amount</option>
+                </select>
+            </div>
+            <div class="income_container mycard">
+            </div>
         </div>
-        <!-- Middle panel: expense transaction history -->
-        <div class="expense_container mycard">
+        <!-- Middle panel: expense filter + transaction history -->
+        <div class="expense_column">
+            <div class="expense_filter_controls">
+                <div class="filter_styling">Search Expenses</div>
+                <select name="expense_filter" id="expense_filter">
+                    <option value="date">Date</option>
+                    <option value="amount+">Increasing Amount</option>
+                    <option value="amount-">Decreasing Amount</option>
+                </select>
+            </div>
+            <div class="expense_container mycard">
+            </div>
         </div>
+
         <!-- Right panel: balance summary and add-transaction form -->
         <div class="add_transaction_container">
             <div class="balance_container">
-                <h5>Your balance is</h5>
+                <h5 class="filter_styling balance_title">Your balance is</h5>
                 <div class="balance">0.0</div>
             </div>
             <form class="add_transaction_form">

@@ -43,6 +43,18 @@ body,html{
     box-shadow: 0px 10px 10px 0px rgba(53, 53, 53, 0.3);
 }
 
+.income_column,
+.expense_column,
+.add_transaction_container{
+    width: 33%;
+}
+
+.add_transaction_container{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .mycard{
     background-color: white;
     width: 33%;
@@ -51,6 +63,27 @@ body,html{
     border-width: 1px;
     border-radius: 0.5rem;
     padding: 0.4rem;
+}
+
+.income_column,
+.expense_column{
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.income_column .mycard,
+.expense_column .mycard{
+    width: auto;
+    height: auto;
+    flex: 1;
+}
+
+.income_filter_controls,
+.expense_filter_controls{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .card_title{
@@ -112,14 +145,52 @@ body,html{
     color: rgb(43, 211, 43);
 }
 
-.balance{
-    font-size: xx-large;
-}
-
 /* Aligns label + value at the top of the transaction form card. */
 .balance_container{
-    width: auto;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
+    gap: 0.5rem;
+    background-color: white;
+    border: solid gray;
+    border-width: 1px;
+    border-radius: 0.5rem;
+    padding: 0 0.75rem 0.75rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.balance_title{
+    margin: 0;
+    width: calc(100% + 1.5rem);
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+    margin-top: -1px;
+    box-sizing: border-box;
+}
+
+.balance{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 3.5rem;
+}
+
+.balance > div{
+    font-size: 2.7rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.filter_styling{
+    display: flex;
+    align-items: center;
+    background: #222;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
 }
