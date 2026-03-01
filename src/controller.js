@@ -98,6 +98,10 @@ const calculateTotalBalance = async ()=>{
     return total;
 }
 
+/**
+ * Handles filter changes for income/expense lists.
+ * "Amount+" sorts ascending, "Amount-" sorts descending, and "none" resets.
+ */
 const controlFilterChange = (ev) => {
   console.log(ev.target.value);
   if (ev.target.id === "income_filter") {

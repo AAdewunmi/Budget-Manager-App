@@ -24,6 +24,15 @@ export class ListView {
   }
 
   /**
+   * Registers the change handler for the list filter select element.
+   */
+  addFilterChangeListner(handler){
+    this.filterSelect.addEventLister("change", (event) =>{
+        handler(event)
+    });
+  }
+
+  /**
    * Formats values consistently as GBP currency.
    */
   formatCurrency(value) {
