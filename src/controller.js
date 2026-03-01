@@ -98,6 +98,53 @@ const calculateTotalBalance = async ()=>{
     return total;
 }
 
+const controlFilterChange = (ev) => {
+  console.log(ev.target.value);
+  if (ev.target.id === "income_filter") {
+    if (ev.target.value === "Amount+") {
+      controlSortByAmount(
+        getTransactionsFromLS(transactionType.INCOME),
+        IncomeTrackerView,
+        false,
+      );
+    }
+
+    if (ev.target.value === "Amount-") {
+      controlSortByAmount(
+        getTransactionsFromLS(transactionType.INCOME),
+        IncomeTrackerView,
+        true,
+      );
+    }
+
+    if (ev.target.value === "none") {
+      IncomeTrackerView.render(getTransactionsFromLS(transactionType.INCOME));
+    }
+  } else {
+    if (ev.target.value === "Amount+") {
+      controlSortByAmount(
+        getTransactionsFromLS(transactionType.EXPENSE),
+        ExpenseTrackerView,
+        false,
+        true,
+      );
+    }
+
+    if (ev.target.value === "Amount-") {
+      controlSortByAmount(
+        getTransactionsFromLS(transactionType.EXPENSE),
+        ExpenseTrackerView,
+        true,
+        true,
+      );
+    }
+
+    if (ev.target.value === "none") {
+      ExpenseTrackerView.render(getTransactionsFromLS(transactionType.EXPENSE));
+    }
+  }
+};
+
 /**
  * Boots the UI by binding handlers and rendering all visible sections.
  */
