@@ -194,3 +194,76 @@ body,html{
     font-size: 1rem;
     font-weight: 700;
 }
+
+.app_brand{
+    position: fixed;
+    top: 1.25rem;
+    left: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.85rem 0.55rem 0.55rem;
+    border-radius: 999px;
+    background: linear-gradient(130deg, rgba(9, 46, 69, 0.88) 0%, rgba(18, 82, 122, 0.86) 48%, rgba(24, 106, 83, 0.86) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0 12px 28px rgba(8, 28, 42, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 10;
+}
+
+.brand_mark{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    font-weight: 900;
+    color: #05322e;
+    background: linear-gradient(145deg, #f5de83 0%, #d9f99d 100%);
+    box-shadow: inset 0 -2px 6px rgba(5, 50, 46, 0.22), 0 5px 10px rgba(5, 50, 46, 0.2);
+}
+
+.brand_copy{
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.brand_kicker{
+    color: rgba(233, 249, 255, 0.82);
+    font-size: 0.63rem;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    font-weight: 700;
+}
+
+.brand_title{
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 760px){
+    .app_brand{
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.45rem 0.65rem 0.45rem 0.45rem;
+        gap: 0.5rem;
+    }
+
+    .brand_mark{
+        width: 1.7rem;
+        height: 1.7rem;
+    }
+
+    .brand_kicker{
+        font-size: 0.55rem;
+    }
+
+    .brand_title{
+        font-size: 0.86rem;
+    }
+}
