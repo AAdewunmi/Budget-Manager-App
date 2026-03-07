@@ -74,9 +74,17 @@ const controllAddTransaction = async (event)=> {
     AddTransactionView.clearForm();
     BalanceView.render(await calculateTotalBalance());
     if (type === transactionType.EXPENSES) {
-        ExpenseTrackerView.render(await getTransactionsByType(transactionType.EXPENSES));
+        const expenses = await getTransactionsByType(transactionType.EXPENSES);
+        const filterValue = String(ExpenseTrackerView.filterSelect?.value || "date").toLowerCase();
+        ExpenseTrackerView.render(
+            sortTransactionsByFilter(Array.isArray(expenses) ? expenses : [], filterValue),
+        );
     } else if (type === transactionType.INCOME) {
-        IncomeTrackerView.render(await getTransactionsByType(transactionType.INCOME));
+        const incomes = await getTransactionsByType(transactionType.INCOME);
+        const filterValue = String(IncomeTrackerView.filterSelect?.value || "date").toLowerCase();
+        IncomeTrackerView.render(
+            sortTransactionsByFilter(Array.isArray(incomes) ? incomes : [], filterValue),
+        );
     }
 } 
 
@@ -99,8 +107,34 @@ const calculateTotalBalance = async ()=>{
 }
 
 /**
+ * Sorts transactions by the selected filter value.
+ */
+const sortTransactionsByFilter = (transactions, filterValue) => {
+    const sortedTransactions = [...transactions];
+
+    if (filterValue === "date") {
+        // Most recent first keeps new entries visible at the top.
+        sortedTransactions.sort(
+            (a, b) => Number(b?.timestamp || 0) - Number(a?.timestamp || 0),
+        );
+        return sortedTransactions;
+    }
+
+    if (filterValue === "amount+") {
+        sortedTransactions.sort((a, b) => Number(a?.value || 0) - Number(b?.value || 0));
+        return sortedTransactions;
+    }
+
+    if (filterValue === "amount-") {
+        sortedTransactions.sort((a, b) => Number(b?.value || 0) - Number(a?.value || 0));
+        return sortedTransactions;
+    }
+
+    return sortedTransactions;
+};
+
+/**
  * Handles filter changes for income/expense lists.
- * "Amount+" sorts ascending, "Amount-" sorts descending, and "none" resets.
  */
 const controlFilterChange = async (ev) => {
     const isIncomeFilter = ev.target.id === "income_filter";
@@ -108,17 +142,11 @@ const controlFilterChange = async (ev) => {
     const targetView = isIncomeFilter ? IncomeTrackerView : ExpenseTrackerView;
     const transactions = await getTransactionsByType(type);
     const safeTransactions = Array.isArray(transactions) ? [...transactions] : [];
-
-    if (ev.target.value === "none") {
-        targetView.render(safeTransactions);
-        return;
-    }
-
-    if (ev.target.value === "Amount+" || ev.target.value === "Amount-") {
-        const sortDirection = ev.target.value === "Amount+" ? 1 : -1;
-        safeTransactions.sort((a, b) => (a.value - b.value) * sortDirection);
-        targetView.render(safeTransactions);
-    }
+    const sortedTransactions = sortTransactionsByFilter(
+        safeTransactions,
+        String(ev.target.value || "").toLowerCase(),
+    );
+    targetView.render(sortedTransactions);
 };
 
 /**
@@ -130,8 +158,20 @@ const init = async ()=>{
     await migrateRentEntriesToExpenses();
     AddTransactionView.addSubmitHandler(controllAddTransaction);
     BalanceView.render(await calculateTotalBalance());
-    ExpenseTrackerView.render(await getTransactionsByType(transactionType.EXPENSES));
-    IncomeTrackerView.render(await getTransactionsByType(transactionType.INCOME));
+    const expenses = await getTransactionsByType(transactionType.EXPENSES);
+    const incomes = await getTransactionsByType(transactionType.INCOME);
+    ExpenseTrackerView.render(
+        sortTransactionsByFilter(
+            Array.isArray(expenses) ? expenses : [],
+            String(ExpenseTrackerView.filterSelect?.value || "date").toLowerCase(),
+        ),
+    );
+    IncomeTrackerView.render(
+        sortTransactionsByFilter(
+            Array.isArray(incomes) ? incomes : [],
+            String(IncomeTrackerView.filterSelect?.value || "date").toLowerCase(),
+        ),
+    );
     IncomeTrackerView.addFilterChangeListner(controlFilterChange);
     ExpenseTrackerView.addFilterChangeListner(controlFilterChange);
 };
