@@ -17,8 +17,53 @@ initDatabase();
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
+const listEndpoints = () => ([
+  { method: "GET", path: "/api", description: "API status and route index" },
+  { method: "GET", path: "/api/health", description: "Health check" },
+  {
+    method: "GET",
+    path: "/api/transactions?type=INCOME|EXPENSES",
+    description: "Fetch transactions by type",
+  },
+  { method: "POST", path: "/api/transactions", description: "Create transaction" },
+  {
+    method: "PUT",
+    path: "/api/transactions/:type",
+    description: "Replace all transactions for INCOME or EXPENSES",
+  },
+  {
+    method: "POST",
+    path: "/api/migrate/local-storage",
+    description: "One-time migration payload from browser localStorage",
+  },
+]);
+
+app.get("/", (_req, res) => {
+  res.json({
+    status: "ok",
+    service: "budget-manager-api",
+    message: "API server is running",
+    appUrl: "http://localhost:1234",
+    apiBaseUrl: `http://localhost:${port}/api`,
+    endpoints: listEndpoints(),
+  });
+});
+
+app.get("/api", (_req, res) => {
+  res.json({
+    status: "ok",
+    service: "budget-manager-api",
+    message: "Use one of the endpoints below",
+    endpoints: listEndpoints(),
+  });
+});
+
 app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok" });
+  res.json({
+    status: "ok",
+    service: "budget-manager-api",
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.get("/api/transactions", (req, res) => {
@@ -62,6 +107,24 @@ app.post("/api/migrate/local-storage", (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+});
+
+app.use("/api", (req, res) => {
+  res.status(404).json({
+    status: "error",
+    message: `No endpoint for ${req.method} ${req.originalUrl}`,
+    apiBaseUrl: `http://localhost:${port}/api`,
+    endpoints: listEndpoints(),
+  });
+});
+
+app.use((req, res) => {
+  res.status(404).json({
+    status: "error",
+    message: `No route for ${req.method} ${req.originalUrl}`,
+    appUrl: "http://localhost:1234",
+    apiBaseUrl: `http://localhost:${port}/api`,
+  });
 });
 
 app.listen(port, () => {
