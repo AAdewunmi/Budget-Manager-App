@@ -160,6 +160,8 @@ const init = async ()=>{
     BalanceView.render(await calculateTotalBalance());
     ExpenseTrackerView.render(await getTransactionsByType(transactionType.EXPENSES));
     IncomeTrackerView.render(await getTransactionsByType(transactionType.INCOME));
+    IncomeTrackerView.addFilterChangeListner(controlFilterSelect);
+    ExpenseTrackerView.addFilterChangeListner(controlFilterSelect);
 };
 
 init().catch((error) => {
