@@ -102,51 +102,23 @@ const calculateTotalBalance = async ()=>{
  * Handles filter changes for income/expense lists.
  * "Amount+" sorts ascending, "Amount-" sorts descending, and "none" resets.
  */
-const controlFilterChange = (ev) => {
-  console.log(ev.target.value);
-  if (ev.target.id === "income_filter") {
-    if (ev.target.value === "Amount+") {
-      controlSortByAmount(
-        getTransactionsFromLS(transactionType.INCOME),
-        IncomeTrackerView,
-        false,
-      );
-    }
-
-    if (ev.target.value === "Amount-") {
-      controlSortByAmount(
-        getTransactionsFromLS(transactionType.INCOME),
-        IncomeTrackerView,
-        true,
-      );
-    }
+const controlFilterChange = async (ev) => {
+    const isIncomeFilter = ev.target.id === "income_filter";
+    const type = isIncomeFilter ? transactionType.INCOME : transactionType.EXPENSES;
+    const targetView = isIncomeFilter ? IncomeTrackerView : ExpenseTrackerView;
+    const transactions = await getTransactionsByType(type);
+    const safeTransactions = Array.isArray(transactions) ? [...transactions] : [];
 
     if (ev.target.value === "none") {
-      IncomeTrackerView.render(getTransactionsFromLS(transactionType.INCOME));
-    }
-  } else {
-    if (ev.target.value === "Amount+") {
-      controlSortByAmount(
-        getTransactionsFromLS(transactionType.EXPENSE),
-        ExpenseTrackerView,
-        false,
-        true,
-      );
+        targetView.render(safeTransactions);
+        return;
     }
 
-    if (ev.target.value === "Amount-") {
-      controlSortByAmount(
-        getTransactionsFromLS(transactionType.EXPENSE),
-        ExpenseTrackerView,
-        true,
-        true,
-      );
+    if (ev.target.value === "Amount+" || ev.target.value === "Amount-") {
+        const sortDirection = ev.target.value === "Amount+" ? 1 : -1;
+        safeTransactions.sort((a, b) => (a.value - b.value) * sortDirection);
+        targetView.render(safeTransactions);
     }
-
-    if (ev.target.value === "none") {
-      ExpenseTrackerView.render(getTransactionsFromLS(transactionType.EXPENSE));
-    }
-  }
 };
 
 /**
@@ -160,8 +132,8 @@ const init = async ()=>{
     BalanceView.render(await calculateTotalBalance());
     ExpenseTrackerView.render(await getTransactionsByType(transactionType.EXPENSES));
     IncomeTrackerView.render(await getTransactionsByType(transactionType.INCOME));
-    IncomeTrackerView.addFilterChangeListner(controlFilterSelect);
-    ExpenseTrackerView.addFilterChangeListner(controlFilterSelect);
+    IncomeTrackerView.addFilterChangeListner(controlFilterChange);
+    ExpenseTrackerView.addFilterChangeListner(controlFilterChange);
 };
 
 init().catch((error) => {

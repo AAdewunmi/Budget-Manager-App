@@ -27,7 +27,7 @@ export class ListView {
    * Registers the change handler for the list filter select element.
    */
   addFilterChangeListner(handler){
-    this.filterSelect.addEventLister("change", (event) =>{
+    this.filterSelect.addEventListener("change", (event) =>{
         handler(event)
     });
   }
