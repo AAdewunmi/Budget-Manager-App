@@ -1,5 +1,6 @@
 import { IndexedDBAdapter } from "./adapters/indexedDBAdapter";
 import { LocalStorageAdapter } from "./adapters/localStorageAdapter";
+import { SQLiteApiAdapter } from "./adapters/sqliteApiAdapter";
 
 /**
  * Central storage module used by the app.
@@ -9,6 +10,7 @@ let activeAdapter = new LocalStorageAdapter();
 export const storageProvider = {
   LOCAL_STORAGE: "localStorage",
   INDEXED_DB: "indexedDB",
+  SQLITE_API: "sqliteApi",
 };
 
 const hasAdapterMethod = (adapter, methodName) =>
@@ -40,10 +42,18 @@ export const useIndexedDBAdapter = (options = {}) => {
   setStorageAdapter(new IndexedDBAdapter(options));
 };
 
+export const useSQLiteApiAdapter = (options = {}) => {
+  setStorageAdapter(new SQLiteApiAdapter(options));
+};
+
 export const configureStorageProvider = (
   provider = storageProvider.LOCAL_STORAGE,
   options = {},
 ) => {
+  if (provider === storageProvider.SQLITE_API) {
+    useSQLiteApiAdapter(options);
+    return;
+  }
   if (provider === storageProvider.INDEXED_DB) {
     useIndexedDBAdapter(options);
     return;
@@ -57,3 +67,13 @@ export const appendTransaction = (transaction) => activeAdapter.appendTransactio
 
 export const replaceTransactionsByType = (type, transactions) =>
   activeAdapter.replaceTransactionsByType(type, transactions);
+
+export const migrateLocalStorageDataToActiveAdapter = ({
+  incomes = [],
+  expenses = [],
+} = {}) => {
+  if (typeof activeAdapter.migrateFromLocalStorageData !== "function") {
+    return Promise.resolve();
+  }
+  return activeAdapter.migrateFromLocalStorageData({ incomes, expenses });
+};

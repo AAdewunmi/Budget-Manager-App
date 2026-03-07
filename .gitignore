@@ -63,3 +63,5 @@ Thumbs.db
 *.bak
 *.tmp
 *.temp
+data/*.sqlite
+data/*.sqlite-*

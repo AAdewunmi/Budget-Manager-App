@@ -1,24 +1,21 @@
-Budget Manager Application (WIP)
+Budget Manager Application
 
 Overview
-This is a work-in-progress web app for tracking income, expenses, and budget categories. The goal is a simple, fast interface for day-to-day money tracking with clear summaries.
+This app tracks income and expenses with sortable transaction lists and live balance updates.
 
-What I am doing now
-- Setting up the project structure and tooling
-- Building the initial HTML/CSS layout
-- Defining the core data model for budgets and transactions
+Storage migration
+The app now uses SQLite through a small Node API server.
+On first startup with the API enabled, legacy browser `localStorage` records are migrated into SQLite.
 
-What I intend to do next
-- Add forms for income and expense entries
-- Implement category budgets and totals
-- Add local storage persistence
-- Create summary views (monthly totals, category breakdowns)
-- Improve UI polish and accessibility (i.e. Add reset button)
-- Move app storage from local to SQLite
+Run locally
+1. Install dependencies: `npm install`
+2. Start SQLite API server: `npm run api`
+3. Start frontend dev server: `npm start`
 
-Tech stack (current)
-- HTML, CSS, JavaScript
-- Parcel for local development
+By default, the frontend expects the API at `http://localhost:3001/api`.
 
-Notes
-This README will expand as features land.
+Tech stack
+- HTML, CSS, JavaScript (frontend)
+- Parcel (frontend dev server)
+- Node.js + Express (API)
+- SQLite via `better-sqlite3`

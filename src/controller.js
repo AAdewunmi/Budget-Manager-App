@@ -3,6 +3,7 @@ import {
     appendTransaction,
     configureStorageProvider,
     getTransactionsByType,
+    migrateLocalStorageDataToActiveAdapter,
     replaceTransactionsByType,
     storageProvider,
 } from "./storage";
@@ -46,6 +47,34 @@ const migrateRentEntriesToExpenses = async ()=>{
         transactionType.EXPENSES,
         [...safeExpenses, ...movedToExpenses],
     );
+};
+
+/**
+ * One-time browser-side migration: push any legacy localStorage data
+ * into the SQLite API backend.
+ */
+const migrateLegacyLocalStorageToSQLiteApi = async () => {
+    const migrationKey = "budget_sqlite_migration_v1_done";
+    if (localStorage.getItem(migrationKey) === "true") return;
+
+    const safeParse = (value) => {
+        try {
+            const parsed = JSON.parse(value || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (_error) {
+            return [];
+        }
+    };
+
+    const incomes = safeParse(localStorage.getItem(transactionType.INCOME));
+    const expenses = safeParse(localStorage.getItem(transactionType.EXPENSES));
+    if (incomes.length === 0 && expenses.length === 0) {
+        localStorage.setItem(migrationKey, "true");
+        return;
+    }
+
+    await migrateLocalStorageDataToActiveAdapter({ incomes, expenses });
+    localStorage.setItem(migrationKey, "true");
 };
 
 /**
@@ -153,8 +182,10 @@ const controlFilterChange = async (ev) => {
  * Boots the UI by binding handlers and rendering all visible sections.
  */
 const init = async ()=>{
-    configureStorageProvider(storageProvider.LOCAL_STORAGE);
-    // To migrate storage, switch to: storageProvider.INDEXED_DB
+    configureStorageProvider(storageProvider.SQLITE_API, {
+        baseUrl: "http://localhost:3001/api",
+    });
+    await migrateLegacyLocalStorageToSQLiteApi();
     await migrateRentEntriesToExpenses();
     AddTransactionView.addSubmitHandler(controllAddTransaction);
     BalanceView.render(await calculateTotalBalance());

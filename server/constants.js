@@ -1,0 +1,8 @@
+const TRANSACTION_TYPES = {
+  INCOME: "INCOME",
+  EXPENSES: "EXPENSES",
+};
+
+module.exports = {
+  TRANSACTION_TYPES,
+};
