@@ -1,21 +1,74 @@
-Budget Manager Application
+# Budget Manager Application
 
-Overview
-This app tracks income and expenses with sortable transaction lists and live balance updates.
+## Overview
+Budget Manager is a web app for tracking income and expenses, viewing running balance, and sorting transactions by date or amount.
 
-Storage migration
-The app now uses SQLite through a small Node API server.
-On first startup with the API enabled, legacy browser `localStorage` records are migrated into SQLite.
+The app now persists data in **SQLite** through a Node/Express API layer.
 
-Run locally
-1. Install dependencies: `npm install`
-2. Start SQLite API server: `npm run api`
-3. Start frontend dev server: `npm start`
+## Architecture
+- Frontend (browser app) runs with Parcel and renders UI.
+- API server handles persistence and validation.
+- SQLite stores transactions in `data/budget-manager.sqlite`.
 
-By default, the frontend expects the API at `http://localhost:3001/api`.
+## Why both `1234` and `3001` exist
+- `http://localhost:1234` is the **frontend app** (Parcel dev server).
+- `http://localhost:3001` is the **backend API** (Express + SQLite).
 
-Tech stack
-- HTML, CSS, JavaScript (frontend)
-- Parcel (frontend dev server)
-- Node.js + Express (API)
-- SQLite via `better-sqlite3`
+The frontend calls API routes under `http://localhost:3001/api`.
+
+## LocalStorage to SQLite migration
+On first startup with the SQLite API provider enabled:
+- The frontend checks old `localStorage` keys (`INCOME`, `EXPENSES`).
+- It posts any legacy records to the API migration endpoint.
+- It sets a one-time flag in `localStorage`: `budget_sqlite_migration_v1_done`.
+
+## Run locally
+1. Install dependencies:
+```bash
+npm install
+```
+2. Start API and frontend:
+```bash
+npm run api & npm start
+```
+
+## API endpoints
+
+### Status and discovery
+- `GET /`  
+Returns service status plus app/API URLs.
+
+- `GET /api`  
+Returns API status and route index.
+
+- `GET /api/health`  
+Returns health payload and timestamp.
+
+### Transactions
+- `GET /api/transactions?type=INCOME`
+- `GET /api/transactions?type=EXPENSES`  
+Returns all transactions for the requested type.
+
+- `POST /api/transactions`  
+Creates (upserts by `id`) a single transaction.
+
+- `PUT /api/transactions/:type` (`:type` = `INCOME` or `EXPENSES`)  
+Replaces all transactions for a given type.
+
+### Migration
+- `POST /api/migrate/local-storage`  
+Body:
+```json
+{
+  "incomes": [],
+  "expenses": []
+}
+```
+Merges legacy browser records into SQLite (insert-ignore by `id`).
+
+## Tech stack
+- Frontend: HTML, CSS, JavaScript (ES modules)
+- Dev server/bundler: Parcel (`parcel-bundler`)
+- Backend: Node.js + Express
+- Database: SQLite (`better-sqlite3`)
+- API middleware: `cors`, `express.json`
