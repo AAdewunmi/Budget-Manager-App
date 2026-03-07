@@ -8,6 +8,7 @@ class AddTransactionView{
     valueInput = this.parentElement.querySelector(".value_input");
     descriptionInput = this.parentElement.querySelector(".description_input");
     typeSelect = this.parentElement.querySelector(".transaction_type");
+    resetButton = this.parentElement.querySelector(".reset-btn");
 
     constructor(){
         this.typeSelect.addEventListener("change", ()=>{
@@ -20,6 +21,13 @@ class AddTransactionView{
      */
     addSubmitHandler(handler){
         this.parentElement.addEventListener("submit", handler.bind(this));
+    }
+
+    /**
+     * Binds reset button click handler.
+     */
+    addResetHandler(handler){
+        this.resetButton.addEventListener("click", handler.bind(this));
     }
 
     /**

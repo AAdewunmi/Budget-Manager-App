@@ -118,6 +118,27 @@ const controllAddTransaction = async (event)=> {
 } 
 
 /**
+ * Resets all stored transactions and restores default list/filter UI state.
+ */
+const controlResetDashboard = async ()=> {
+    const isConfirmed = window.confirm(
+        "This will remove all income and expense records. Continue?",
+    );
+    if (!isConfirmed) return;
+
+    await replaceTransactionsByType(transactionType.INCOME, []);
+    await replaceTransactionsByType(transactionType.EXPENSES, []);
+
+    IncomeTrackerView.filterSelect.value = "date";
+    ExpenseTrackerView.filterSelect.value = "date";
+    AddTransactionView.clearForm();
+
+    IncomeTrackerView.render([]);
+    ExpenseTrackerView.render([]);
+    BalanceView.render(await calculateTotalBalance());
+};
+
+/**
  * Computes the current net balance from stored income and expense records.
  */
 const calculateTotalBalance = async ()=>{
@@ -188,6 +209,7 @@ const init = async ()=>{
     await migrateLegacyLocalStorageToSQLiteApi();
     await migrateRentEntriesToExpenses();
     AddTransactionView.addSubmitHandler(controllAddTransaction);
+    AddTransactionView.addResetHandler(controlResetDashboard);
     BalanceView.render(await calculateTotalBalance());
     const expenses = await getTransactionsByType(transactionType.EXPENSES);
     const incomes = await getTransactionsByType(transactionType.INCOME);

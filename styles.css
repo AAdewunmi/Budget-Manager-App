@@ -114,12 +114,29 @@ body,html{
 .submit-btn{
     background-color: rgb(7, 87, 167);
     color: white;
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
+    padding: 0.55rem 0.6rem;
     border: none;
     font-size: large;
     border-radius: 0.2rem;
     cursor: pointer;
+}
+
+.reset-btn{
+    background-color: rgb(235, 241, 246);
+    color: rgb(29, 52, 73);
+    padding: 0.55rem 0.6rem;
+    border: 1px solid rgb(185, 201, 217);
+    font-size: large;
+    border-radius: 0.2rem;
+    cursor: pointer;
+}
+
+.submit-btn:hover{
+    background-color: rgb(6, 76, 145);
+}
+
+.reset-btn:hover{
+    background-color: rgb(221, 232, 242);
 }
 
 /* Single income/expense row in list panels. */
