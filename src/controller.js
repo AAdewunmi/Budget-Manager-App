@@ -101,20 +101,7 @@ const controllAddTransaction = async (event)=> {
     const newTran = new Transaction(type, amount, description);
     await appendTransaction(newTran);
     AddTransactionView.clearForm();
-    BalanceView.render(await calculateTotalBalance());
-    if (type === transactionType.EXPENSES) {
-        const expenses = await getTransactionsByType(transactionType.EXPENSES);
-        const filterValue = String(ExpenseTrackerView.filterSelect?.value || "date").toLowerCase();
-        ExpenseTrackerView.render(
-            sortTransactionsByFilter(Array.isArray(expenses) ? expenses : [], filterValue),
-        );
-    } else if (type === transactionType.INCOME) {
-        const incomes = await getTransactionsByType(transactionType.INCOME);
-        const filterValue = String(IncomeTrackerView.filterSelect?.value || "date").toLowerCase();
-        IncomeTrackerView.render(
-            sortTransactionsByFilter(Array.isArray(incomes) ? incomes : [], filterValue),
-        );
-    }
+    await renderDashboardState();
 } 
 
 /**
@@ -132,10 +119,7 @@ const controlResetDashboard = async ()=> {
     IncomeTrackerView.filterSelect.value = "date";
     ExpenseTrackerView.filterSelect.value = "date";
     AddTransactionView.clearForm();
-
-    IncomeTrackerView.render([]);
-    ExpenseTrackerView.render([]);
-    BalanceView.render(await calculateTotalBalance());
+    await renderDashboardState();
 };
 
 /**
@@ -184,6 +168,59 @@ const sortTransactionsByFilter = (transactions, filterValue) => {
 };
 
 /**
+ * Renders balance and both transaction lists using current filter selections.
+ */
+const renderDashboardState = async () => {
+    BalanceView.render(await calculateTotalBalance());
+    const expenses = await getTransactionsByType(transactionType.EXPENSES);
+    const incomes = await getTransactionsByType(transactionType.INCOME);
+    ExpenseTrackerView.render(
+        sortTransactionsByFilter(
+            Array.isArray(expenses) ? expenses : [],
+            String(ExpenseTrackerView.filterSelect?.value || "date").toLowerCase(),
+        ),
+    );
+    IncomeTrackerView.render(
+        sortTransactionsByFilter(
+            Array.isArray(incomes) ? incomes : [],
+            String(IncomeTrackerView.filterSelect?.value || "date").toLowerCase(),
+        ),
+    );
+};
+
+/**
+ * Moves one transaction from its current type bucket to the opposite type bucket.
+ */
+const swapTransactionType = async ({ id, type }) => {
+    if (!id) return;
+    const sourceType = type === transactionType.EXPENSES
+        ? transactionType.EXPENSES
+        : transactionType.INCOME;
+    const targetType = sourceType === transactionType.INCOME
+        ? transactionType.EXPENSES
+        : transactionType.INCOME;
+
+    const sourceTransactions = await getTransactionsByType(sourceType);
+    const targetTransactions = await getTransactionsByType(targetType);
+    if (!Array.isArray(sourceTransactions) || !Array.isArray(targetTransactions)) return;
+
+    const sourceIndex = sourceTransactions.findIndex(
+        (transaction) => String(transaction?.id || "") === String(id),
+    );
+    if (sourceIndex < 0) return;
+
+    const safeSource = [...sourceTransactions];
+    const [transactionToMove] = safeSource.splice(sourceIndex, 1);
+    const movedTransaction = {
+        ...transactionToMove,
+        type: targetType,
+    };
+
+    await replaceTransactionsByType(sourceType, safeSource);
+    await replaceTransactionsByType(targetType, [...targetTransactions, movedTransaction]);
+};
+
+/**
  * Handles filter changes for income/expense lists.
  */
 const controlFilterChange = async (ev) => {
@@ -200,6 +237,19 @@ const controlFilterChange = async (ev) => {
 };
 
 /**
+ * Handles swap button clicks from either list panel.
+ */
+const controlSwapTransaction = async ({ id, type }) => {
+    const destinationLabel = type === transactionType.EXPENSES ? "Income" : "Expenses";
+    const isConfirmed = window.confirm(
+        `Move this transaction to ${destinationLabel}?`,
+    );
+    if (!isConfirmed) return;
+    await swapTransactionType({ id, type });
+    await renderDashboardState();
+};
+
+/**
  * Boots the UI by binding handlers and rendering all visible sections.
  */
 const init = async ()=>{
@@ -210,21 +260,9 @@ const init = async ()=>{
     await migrateRentEntriesToExpenses();
     AddTransactionView.addSubmitHandler(controllAddTransaction);
     AddTransactionView.addResetHandler(controlResetDashboard);
-    BalanceView.render(await calculateTotalBalance());
-    const expenses = await getTransactionsByType(transactionType.EXPENSES);
-    const incomes = await getTransactionsByType(transactionType.INCOME);
-    ExpenseTrackerView.render(
-        sortTransactionsByFilter(
-            Array.isArray(expenses) ? expenses : [],
-            String(ExpenseTrackerView.filterSelect?.value || "date").toLowerCase(),
-        ),
-    );
-    IncomeTrackerView.render(
-        sortTransactionsByFilter(
-            Array.isArray(incomes) ? incomes : [],
-            String(IncomeTrackerView.filterSelect?.value || "date").toLowerCase(),
-        ),
-    );
+    IncomeTrackerView.addSwapHandler(controlSwapTransaction);
+    ExpenseTrackerView.addSwapHandler(controlSwapTransaction);
+    await renderDashboardState();
     IncomeTrackerView.addFilterChangeListner(controlFilterChange);
     ExpenseTrackerView.addFilterChangeListner(controlFilterChange);
 };

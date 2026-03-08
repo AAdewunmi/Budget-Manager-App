@@ -143,15 +143,35 @@ body,html{
 .transaction_card{
     display: flex;
     justify-content: space-between;
+    gap: 0.5rem;
     width: auto;
     padding: 0.4rem;
-    height: 1.5rem;
+    min-height: 1.7rem;
     align-items: center;
     border: solid rgb(187, 187, 187);
     border-width: 1px;
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
     border-radius: 0.3rem;
+}
+
+.transaction_content{
+    overflow-wrap: anywhere;
+}
+
+.swap_btn{
+    border: 1px solid rgb(152, 171, 191);
+    background-color: rgb(237, 244, 250);
+    color: rgb(25, 53, 84);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.45rem;
+    cursor: pointer;
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+.swap_btn:hover{
+    background-color: rgb(221, 233, 244);
 }
 
 .red{

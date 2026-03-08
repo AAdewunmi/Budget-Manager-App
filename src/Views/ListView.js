@@ -33,6 +33,20 @@ export class ListView {
   }
 
   /**
+   * Registers click handler for swap/move action on transaction rows.
+   */
+  addSwapHandler(handler) {
+    this.container.addEventListener("click", (event) => {
+      const button = event.target.closest('button[data-action="swap"]');
+      if (!button) return;
+      handler({
+        id: button.dataset.id,
+        type: button.dataset.type,
+      });
+    });
+  }
+
+  /**
    * Formats values consistently as GBP currency.
    */
   formatCurrency(value) {
@@ -48,10 +62,20 @@ export class ListView {
     const description =
       (transaction.description || "").trim() || "No description";
     const valueClass = transaction.type === "EXPENSES" ? "red" : "green";
+    const targetType = transaction.type === "EXPENSES" ? "INCOME" : "EXPENSES";
+    const moveLabel = targetType === "INCOME" ? "Move to Income" : "Move to Expenses";
+    const transactionId = String(transaction.id || "");
     return `<div class="transaction_card">
-        <div>${description}
+        <div class="transaction_content">${description}
         - <span class="${valueClass}">${this.formatCurrency(transaction.value)}</span>
         - ${this.formatTimestamp(transaction.timestamp)}</div>
+        <button
+          type="button"
+          class="swap_btn"
+          data-action="swap"
+          data-id="${transactionId}"
+          data-type="${transaction.type}"
+        >${moveLabel}</button>
         </div>`;
   }
 
