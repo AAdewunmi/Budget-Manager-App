@@ -23,13 +23,12 @@ This repository is feature-complete for the current scope and includes:
 - Legacy localStorage to SQLite migration path
 
 ## Screenshots
-Replace or keep these placeholders based on your preferred final assets.
 
 ### Empty / Initial State
-![Budget Manager - Empty State](./screenshots/Screenshot%202026-03-08%20at%2008.26.23.png)
+<img width="1439" height="901" alt="Image" src="https://github.com/user-attachments/assets/00e4ee19-2901-4e52-af23-f88094e03a65" />
 
 ### Populated State (with Swap Actions)
-![Budget Manager - Populated State](./screenshots/Screenshot%202026-03-08%20at%2008.29.44.png)
+<img width="1438" height="900" alt="Image" src="https://github.com/user-attachments/assets/253bd188-bc63-46b2-b1b3-0fd47db27e16" />
 
 ## Architecture
 - **Frontend**: Vanilla JavaScript (ES modules), HTML, CSS
@@ -81,4 +80,4 @@ Core endpoints:
 - `RUNBOOK.md` - Operational guide (run/test/troubleshooting)
 
 ## License
-ISC
+LICENSE
