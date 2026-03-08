@@ -3,8 +3,11 @@ const path = require("path");
 const Database = require("better-sqlite3");
 const { TRANSACTION_TYPES } = require("./constants");
 
-const dataDir = path.join(__dirname, "..", "data");
-const dbPath = path.join(dataDir, "budget-manager.sqlite");
+const defaultDbPath = path.join(__dirname, "..", "data", "budget-manager.sqlite");
+const dbPath = process.env.BUDGET_DB_PATH
+  ? path.resolve(process.env.BUDGET_DB_PATH)
+  : defaultDbPath;
+const dataDir = path.dirname(dbPath);
 
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
@@ -121,10 +124,15 @@ const mergeLocalStorageData = ({ incomes = [], expenses = [] }) => {
   tx();
 };
 
+const closeDatabase = () => {
+  db.close();
+};
+
 module.exports = {
   initDatabase,
   getTransactionsByType,
   appendTransaction,
   replaceTransactionsByType,
   mergeLocalStorageData,
+  closeDatabase,
 };
