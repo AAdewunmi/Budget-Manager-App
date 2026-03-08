@@ -1,74 +1,84 @@
-# Budget Manager Application
+# Budget Manager App
 
-## Overview
-Budget Manager is a web app for tracking income and expenses, viewing running balance, and sorting transactions by date or amount.
+A full-stack personal finance tracker for managing income and expenses, calculating live balance, and maintaining transaction history with persistent storage.
 
-The app now persists data in **SQLite** through a Node/Express API layer.
+## Project Status
+**Completed** - Final project release.
+
+This repository is feature-complete for the current scope and includes:
+- Frontend transaction management UI
+- Node/Express API backend
+- SQLite persistence
+- Automated backend test suite
+
+## Key Features
+- Add income and expense transactions with description and amount
+- Live balance calculation (`income - expenses`)
+- Filter/sort transactions by:
+  - Date
+  - Increasing amount
+  - Decreasing amount
+- Swap transactions between Income and Expenses directly from list cards
+- Reset dashboard data with confirmation flow
+- Legacy localStorage to SQLite migration path
+
+## Screenshots
+Replace or keep these placeholders based on your preferred final assets.
+
+### Empty / Initial State
+![Budget Manager - Empty State](./screenshots/Screenshot%202026-03-08%20at%2008.26.23.png)
+
+### Populated State (with Swap Actions)
+![Budget Manager - Populated State](./screenshots/Screenshot%202026-03-08%20at%2008.29.44.png)
 
 ## Architecture
-- Frontend (browser app) runs with Parcel and renders UI.
-- API server handles persistence and validation.
-- SQLite stores transactions in `data/budget-manager.sqlite`.
+- **Frontend**: Vanilla JavaScript (ES modules), HTML, CSS
+- **Bundler/Dev Server**: Parcel
+- **Backend**: Node.js + Express
+- **Database**: SQLite (`better-sqlite3`)
+- **API Base URL**: `http://localhost:3001/api`
+- **Default Frontend URL**: `http://localhost:1234`
 
-## Why both `1234` and `3001` exist
-- `http://localhost:1234` is the **frontend app** (Parcel dev server).
-- `http://localhost:3001` is the **backend API** (Express + SQLite).
+## Quick Start
+For full setup and operational instructions, see:
 
-The frontend calls API routes under `http://localhost:3001/api`.
+- [RUNBOOK.md](./RUNBOOK.md)
 
-## LocalStorage to SQLite migration
-On first startup with the SQLite API provider enabled:
-- The frontend checks old `localStorage` keys (`INCOME`, `EXPENSES`).
-- It posts any legacy records to the API migration endpoint.
-- It sets a one-time flag in `localStorage`: `budget_sqlite_migration_v1_done`.
+Minimal start commands:
 
-## Run locally
-1. Install dependencies:
 ```bash
 npm install
+npm run api
+npm start
 ```
-2. Start API and frontend:
+
+## Testing
+Run the automated test suite:
+
 ```bash
-npm run api & npm start
+npm test
 ```
 
-## API endpoints
+Current suite covers:
+- DB validation and CRUD behavior
+- Migration logic
+- API route handler success/error flows
 
-### Status and discovery
-- `GET /`  
-Returns service status plus app/API URLs.
+## API Summary
+Core endpoints:
+- `GET /api`
+- `GET /api/health`
+- `GET /api/transactions?type=INCOME|EXPENSES`
+- `POST /api/transactions`
+- `PUT /api/transactions/:type`
+- `POST /api/migrate/local-storage`
 
-- `GET /api`  
-Returns API status and route index.
+## Repository Structure
+- `src/` - Frontend application logic and views
+- `server/` - Express API and SQLite data access
+- `data/` - SQLite database files (runtime)
+- `test/` - Automated tests
+- `RUNBOOK.md` - Operational guide (run/test/troubleshooting)
 
-- `GET /api/health`  
-Returns health payload and timestamp.
-
-### Transactions
-- `GET /api/transactions?type=INCOME`
-- `GET /api/transactions?type=EXPENSES`  
-Returns all transactions for the requested type.
-
-- `POST /api/transactions`  
-Creates (upserts by `id`) a single transaction.
-
-- `PUT /api/transactions/:type` (`:type` = `INCOME` or `EXPENSES`)  
-Replaces all transactions for a given type.
-
-### Migration
-- `POST /api/migrate/local-storage`  
-Body:
-```json
-{
-  "incomes": [],
-  "expenses": []
-}
-```
-Merges legacy browser records into SQLite (insert-ignore by `id`).
-
-## Tech stack
-- Frontend: HTML, CSS, JavaScript (ES modules)
-- Dev server/bundler: Parcel (`parcel-bundler`)
-- Backend: Node.js + Express
-- Database: SQLite (`better-sqlite3`)
-- API middleware: `cors`, `express.json`
+## License
+ISC
